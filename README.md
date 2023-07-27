@@ -6,8 +6,7 @@ Tic Tac Toe game (web version) made using HTML, JS, REACT.
 
 This is a very simple and light tic tac toe web game made using HTML, CSS, JS and REACT. This game is very easy to play.
 
-![](![image](https://github.com/AlonRTPve/TicTacToe/assets/94314848/93c5a3d3-6ab0-4984-a877-f94c408c4617)
-)
+![](image.png)
 
 ### Tech Stack
 
@@ -30,12 +29,15 @@ git clone https://github.com/AlonRTPve/TicTacToe
 ```sh
 cd tictactoe
 ```
+```sh
 3. npm install 
-
+```
+```sh
 4. npm start
-
+```
+```sh
 5. go to localhost:3000 and you can start playing
-
+```
 ### Features to add
 
 [*] ADD BOT (implement minimax algorithm)
