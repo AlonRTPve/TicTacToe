@@ -1,4 +1,4 @@
-# [Tictactoe]([githublink (notyetupdated)]/ "tictactoe")
+# [Tictactoe](Tictactoe Using React Made By AlonRTPve)
 
 Tic Tac Toe game (web version) made using HTML, JS, REACT.
 
@@ -29,16 +29,18 @@ git clone https://github.com/AlonRTPve/TicTacToe
 ```sh
 cd tictactoe
 ```
+3. Install dependencies by running
 ```sh
-3. npm install 
+ npm install 
 ```
+4. Run by typing in cmd:
 ```sh
-4. npm start
+npm start
 ```
-```sh
-5. go to localhost:3000 and you can start playing
-```
+
 ### Features to add
 
-[*] ADD BOT (implement minimax algorithm)
-[*] ADD Sockets
+- [x] Add BOT
+- [ ] ADD Sockets
+- [ ] Add Multiple Bot Levels (implement minimax algorithm)
+

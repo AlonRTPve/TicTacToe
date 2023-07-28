@@ -1,74 +1,19 @@
 import { useState } from "react";
-
-
-function Square({ value, onSquareClick, isColorActive }) {
-  return (
-    <button className={"square " + (isColorActive ? "button-yellow" : "")}  onClick={onSquareClick}>
-      {value}
-    </button>
-  );
-}
-
-export const Scoreboard = ({ score }) => {
-  return (
-    <div className="scoreboard">
-      <div className="scoreboard-player1">
-        Player1: {score[0]}
-      </div>
-      <div className="scoreboard-player2">
-        Player2: {score[1]}
-      </div>
-    </div>
-  );
-};
+import { useEffect } from "react";
+import Game from './Components/Game.js';
+import { Scoreboard } from "./Components/Scoreboard";
+import  Square from "./Components/Square.js";
 
 export default function Board() {
-  const [xIsNext, setXIsNext] = useState(true);
+  const [xIsNext, setXIsNext] = useState(true); //X : true, O : False
   const [squares, setSquares] = useState(Array(9).fill(null));
-  const [currentText, setText] = useState("Next player: X");
+  const [currentText, setText] = useState("Player's turn: X");
   const [score, setScore] = useState([0, 0]);
-  const [color, setColor] = useState(Array(9).fill(false))
-  const [opponent, setOpponent] = useState()
+  const [color, setColor] = useState(Array(9).fill(false));
+  const [opponent, setOpponent] = useState(true);
 
-  function handleClick(i) {
-    const nextSquares = squares.slice();
-
-    if (squares[i] || calculateWinner(squares)) {
-      return;
-    }
-
-    nextSquares[i] = xIsNext ? "X" : "O";
-    setSquares(nextSquares);
-
-    if (calculateTie(nextSquares)) {
-      return;
-    }
-
-    if (calculateWinner(nextSquares)) {
-      let [winner, winningmoves] = calculateWinner(nextSquares);
-      change_square_colors(winningmoves); // changes the color of the winning squares
-      if (winner) {
-        setText("Winner: " + winner)
-        if (winner === "X") {
-          setScore((scores) => [scores[0]++, scores[1]]);
-        } else {
-          setScore((scores) => [scores[0], scores[1]++]);
-        }
-
-        return;
-      }
-    }
-    setText("Next player: " + (xIsNext ? "O" : "X")); //Rerenders the status div with the current text
-    setXIsNext(!xIsNext);
-  }
-
-  function resetBoard() {
-    setSquares(Array(9).fill(null));
-    setColor(Array(9).fill(null));
-    setXIsNext(xIsNext);
-  }
-
-  function change_square_colors(winningmoves) {
+  
+  function change_square_colors(winningmoves) { //Function that changes the square colors
     const nextColor = color.slice();
     for (let i = 0; i < winningmoves.length; i++) {
       nextColor[winningmoves[i]] = true;
@@ -76,12 +21,63 @@ export default function Board() {
     setColor(nextColor);
   }
 
-  function calculateTie(nextSquares) {
-    if (!nextSquares.includes(null) && !calculateWinner(nextSquares)) {
-      setText("Its a tie!");
-      return true;
-    }
+  function resetBoard() { //once resetbutton is clicked, resets the board.
+    setSquares(Array(9).fill(null));
+    setColor(Array(9).fill(null));
+    setXIsNext(true);
+    setText("Player's turn: X" );
   }
+
+  function switchMode(Mode) {
+    setOpponent(Mode);
+    resetBoard();
+    setScore([0,0]);
+
+  }
+
+  function handleClick(i) {
+    let nextSquares = squares.slice(); // creates a copy of the squares state
+
+    if (squares[i] || Game.calculateWinner(squares) || Game.calculateTie(squares)) { //Check if the move already exists or the game has ended
+      return;
+    }
+
+    nextSquares[i] = xIsNext ? "X" : "O";
+    setSquares(nextSquares);
+
+    if (Game.calculateTie(nextSquares)) {
+      setText("Its a tie!");
+      return;
+    }
+
+    if (!opponent) {
+      Game.makeMove(nextSquares);
+    }
+
+    if (Game.calculateWinner(nextSquares)) {
+      let [winner, winningmoves] = Game.calculateWinner(nextSquares);
+      change_square_colors(winningmoves); // changes the color of the winning squares to yellow
+      if (winner) {
+        setText("Winner: " + winner);
+        if (winner === "X") {
+          setScore(scores => [scores[0] + 1, scores[1]]);
+        } else {
+          setScore(scores => [scores[0] , scores[1] + 1]);
+        }
+
+        return;
+      }
+    }
+    
+    if (opponent){
+      setXIsNext(!xIsNext);
+      setText("Player's turn: " + (xIsNext ? "O" : "X")); //Rerenders the status div with the current text  
+    }
+
+
+  }
+  
+
   return (
     <>
       <div className="place-center">
@@ -107,27 +103,12 @@ export default function Board() {
         <button type="button" onClick={resetBoard} className="reset-button">
           Reset Board
         </button>
+        <div className="choose-opponent">
+          Opponent:
+            <button className="choose-opponent-player" onClick={() => switchMode(true)}>Player</button> 
+            <button className="choose-opponent-bot" onClick={() => switchMode(false)}>Bot</button>
+        </div>
       </div>
     </>
   );
-}
-
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return [squares[a], [a,b,c]];
-    }
-  }
-  return null;
 }

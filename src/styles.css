@@ -169,3 +169,38 @@ body {
 
 }
 
+
+.choose-opponent{
+  display: flex;
+  color: white;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 0.5em;
+}
+
+
+.choose-opponent-player{
+  display: inline-block;
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  background-color: #4299e1;
+  border-radius: 50px;
+  font-weight: 700;
+  color: white;
+  line-height: 26px;
+  width: 55px;
+}
+
+.choose-opponent-bot{
+  display: inline-block;
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  background-color: #4299e1;
+  border-radius: 50px;
+  font-weight: 700;
+  color: white;
+  line-height: 26px;
+  width: 55px;
+}
