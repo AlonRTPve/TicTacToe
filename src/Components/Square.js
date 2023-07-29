@@ -4,5 +4,5 @@ export default function Square({ value, onSquareClick, isColorActive }) { //squa
         {value}
       </button>
     );
-  }
+  };
   

@@ -16,9 +16,9 @@ export default function Board() {
     const nextColor = color.slice();
     for (let i = 0; i < winningmoves.length; i++) {
       nextColor[winningmoves[i]] = true;
-    }
+    };
     setColor(nextColor);
-  }
+  };
 
   function resetBoard() { //once resetbutton is clicked, resets the board.
     setSquares(Array(9).fill(null));
@@ -26,25 +26,24 @@ export default function Board() {
     setXIsNext(true);
     setText("Player's turn: X" );
     setAvailableMoves(Array.from({length: 9}, (_, index) => index));
-  }
+  };
 
   function switchMode(Mode) {
     setOpponent(Mode);
     resetBoard();
     setScore([0,0]);
-
-  }
+  };
 
   function handleClick(i) {
     let nextSquares = squares.slice(); // creates a copy of the squares state
-    let nextAvailableMoves = availableMoves.slice() // creates a copy of the available moves state
+    let nextAvailableMoves = availableMoves.slice(); // creates a copy of the available moves state
     if (squares[i] || Game.calculateWinner(squares) || Game.calculateTie(squares)) { //Check if the move already exists or the game has ended
       return;
-    }
+    };
     const index = nextAvailableMoves.indexOf(i); // gets index of the i
     if (index > -1) { // only splice array when item is found
       nextAvailableMoves.splice(index, 1); // 2nd parameter means remove one item only
-    }
+    };
 
     nextSquares[i] = xIsNext ? "X" : "O";
     setSquares(nextSquares);
@@ -53,11 +52,11 @@ export default function Board() {
     if (Game.calculateTie(nextSquares)) {
       setText("Its a tie!");
       return;
-    }
+    };
 
     if (!opponent && !Game.calculateWinner(nextSquares)) {
       Game.makeMove(nextSquares, nextAvailableMoves);
-    }
+    };
 
 
     if (Game.calculateWinner(nextSquares)) {
@@ -69,18 +68,18 @@ export default function Board() {
           setScore(scores => [scores[0] + 1, scores[1]]);
         } else {
           setScore(scores => [scores[0] , scores[1] + 1]);
-        }
+        };
 
         return;
-      }
-    }
+      };
+    };
     
     if (opponent){
       setXIsNext(!xIsNext);
       setText("Player's turn: " + (xIsNext ? "O" : "X")); //Rerenders the status div with the current text  
-    }
+    };
 
-  }
+  };
 
 
   return (
@@ -116,4 +115,4 @@ export default function Board() {
       </div>
     </>
   );
-}
+};

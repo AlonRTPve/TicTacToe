@@ -15,22 +15,22 @@ export default class Game {
         const [a, b, c] = this.lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
           return [squares[a], [a,b,c]];
-        }
-      }
+        };
+      };
       return null;
-    }
+    };
   
     static calculateTie(nextSquares) {
       if (!nextSquares.includes(null) && !this.calculateWinner(nextSquares)) {
         return true;
-      }
-    }
+      };
+    };
 
     static makeMove(nextSquares, nextAvailableMoves){ //nextAvailableMoves was created to reduce unnecessary computation.
       let turn = Math.floor(Math.random() * nextAvailableMoves.length);
       nextSquares[nextAvailableMoves[turn]] = "O";
       nextAvailableMoves.splice(turn, 1); // 2nd parameter means remove one item only
-      } 
+      }; 
       
-    }
+    };
   
