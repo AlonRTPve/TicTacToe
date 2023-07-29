@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useEffect } from "react";
 import Game from './Components/Game.js';
 import { Scoreboard } from "./Components/Scoreboard";
 import  Square from "./Components/Square.js";
@@ -11,8 +10,8 @@ export default function Board() {
   const [score, setScore] = useState([0, 0]);
   const [color, setColor] = useState(Array(9).fill(false));
   const [opponent, setOpponent] = useState(true);
+  const [availableMoves, setAvailableMoves] = useState(Array.from({length: 9}, (_, index) => index)); // Creates an array with 9 elements 0-8
 
-  
   function change_square_colors(winningmoves) { //Function that changes the square colors
     const nextColor = color.slice();
     for (let i = 0; i < winningmoves.length; i++) {
@@ -26,6 +25,7 @@ export default function Board() {
     setColor(Array(9).fill(null));
     setXIsNext(true);
     setText("Player's turn: X" );
+    setAvailableMoves(Array.from({length: 9}, (_, index) => index));
   }
 
   function switchMode(Mode) {
@@ -37,22 +37,28 @@ export default function Board() {
 
   function handleClick(i) {
     let nextSquares = squares.slice(); // creates a copy of the squares state
-
+    let nextAvailableMoves = availableMoves.slice() // creates a copy of the available moves state
     if (squares[i] || Game.calculateWinner(squares) || Game.calculateTie(squares)) { //Check if the move already exists or the game has ended
       return;
+    }
+    const index = nextAvailableMoves.indexOf(i); // gets index of the i
+    if (index > -1) { // only splice array when item is found
+      nextAvailableMoves.splice(index, 1); // 2nd parameter means remove one item only
     }
 
     nextSquares[i] = xIsNext ? "X" : "O";
     setSquares(nextSquares);
+    setAvailableMoves(nextAvailableMoves);
 
     if (Game.calculateTie(nextSquares)) {
       setText("Its a tie!");
       return;
     }
 
-    if (!opponent) {
-      Game.makeMove(nextSquares);
+    if (!opponent && !Game.calculateWinner(nextSquares)) {
+      Game.makeMove(nextSquares, nextAvailableMoves);
     }
+
 
     if (Game.calculateWinner(nextSquares)) {
       let [winner, winningmoves] = Game.calculateWinner(nextSquares);
@@ -74,9 +80,8 @@ export default function Board() {
       setText("Player's turn: " + (xIsNext ? "O" : "X")); //Rerenders the status div with the current text  
     }
 
-
   }
-  
+
 
   return (
     <>

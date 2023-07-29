@@ -26,13 +26,11 @@ export default class Game {
       }
     }
 
-    static makeMove(nextSquares) {
-      let turn = Math.floor(Math.random() * 9);
-      while (nextSquares[turn] != null) {
-        turn = Math.floor(Math.random() * 9);
-      }
-      nextSquares[turn] = "O";
-      return nextSquares;
+    static makeMove(nextSquares, nextAvailableMoves){ //nextAvailableMoves was created to reduce unnecessary computation.
+      let turn = Math.floor(Math.random() * nextAvailableMoves.length);
+      nextSquares[nextAvailableMoves[turn]] = "O";
+      nextAvailableMoves.splice(turn, 1); // 2nd parameter means remove one item only
+      } 
+      
     }
   
-  }
